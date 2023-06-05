@@ -1,0 +1,140 @@
+# C++ Word Frequency Counter
+
+This is a C++ program that counts the frequency of words from an input stream and displays the results in descending order.
+
+## Prerequisites
+
+Before running the program, make sure you have the following:
+
+- C++ compiler
+- Input data (you can provide input through the standard input stream)
+
+## Usage
+
+Follow these steps to run the program:
+
+1. Compile the source code using the C++ compiler. For example, using g++:
+
+```shell
+g++ word_frequency.cpp -o word_frequency
+```
+
+2. Run the compiled executable:
+
+```shell
+./word_frequency
+```
+
+3. Provide input by typing words followed by the enter key. The program will read the words until you stop inputting (e.g., by pressing Ctrl + D in Unix-like systems).
+
+4. The program will output the vocabulary size and the frequency count for each word, sorted in descending order.
+
+## Code Explanation
+
+The program works as follows:
+
+1. It includes necessary C++ libraries for input/output operations, file handling, and string manipulation.
+
+```cpp
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <algorithm>
+```
+
+2. It defines a helper function `sortbysec` to sort pairs of integers and strings based on the string values.
+
+```cpp
+bool sortbysec(const pair<int, string> &a, const pair<int, string> &b) {
+    return (a.second < b.second);
+}
+```
+
+3. The `main` function is the entry point of the program. It declares variables and initializes them.
+
+```cpp
+int main() {
+    fstream file;
+    string word, filename;
+    pair<int, string> vocab[1000];
+    int i = 0, j = 0, count = 0;
+    bool contains = false;
+```
+
+4. The program reads words from the input stream (cin) until there are no more words.
+
+```cpp
+while (cin >> word) {
+    contains = false;
+    transform(word.begin(), word.end(), word.begin(), ::tolower);
+```
+
+5. If the first element of the vocabulary array is empty, it means the array is uninitialized. In this case, the current word is added as the first element with a frequency count of 1.
+
+```cpp
+if (vocab[0].second.empty()) {
+    vocab[i].second = word;
+    vocab[i].first = 1;
+}
+```
+
+6. If the vocabulary array is already initialized, the program checks if the current word already exists in the array. If it does, the program increments the frequency count for that word.
+
+```cpp
+else {
+    for (j = 0; j < distance(begin(vocab), end(vocab)); j++) {
+        if (get<1>(vocab[j]) == word) {
+            contains = true;
+            vocab[j].first = vocab[j].first + 1;
+            break;
+        }
+    }
+```
+
+7. If the current word does not exist in the vocabulary array, it is added as a new element with a frequency count of 1.
+
+```cpp
+if (!contains) {
+    vocab[i].second = word;
+    vocab[i].first = 1;
+}
+```
+
+8. After processing all input words, the program sorts the vocabulary array in ascending order based on the word strings.
+
+```cpp
+sort(begin(vocab), end(vocab), ::sortbysec);
+```
+
+9. The program counts the number of non-zero frequency counts to determine the vocabulary size.
+
+```cpp
+for (int i = 999; i > 0; i--) {
+    if (vocab[i].first != 0) {
+        count++;
+    }
+}
+```
+
+10. The
+
+ program then outputs the vocabulary size and the word frequency count for each word, excluding words with a frequency count less than 1.
+
+```cpp
+cout << "Vocabulary Size = " << count << endl;
+for (int i = 0; i < distance(begin(vocab), end(vocab)); i++) {
+    if (vocab[i].first < 1)
+        continue;
+    cout << vocab[i].second << ' ' << vocab[i].first << endl;
+}
+```
+
+11. Finally, the program returns 0 to indicate successful execution.
+
+```cpp
+return 0;
+```
+
+## License
+
+This program is released under the [MIT License](https://opensource.org/licenses/MIT). Feel free to use, modify, and distribute it as per the license terms.
